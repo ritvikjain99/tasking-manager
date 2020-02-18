@@ -20,6 +20,26 @@ export default defineMessages({
     id: 'loginPage.title',
     defaultMessage: 'Login or register an account',
   },
+  userList: {
+    id: 'management.users.title',
+    defaultMessage: 'User list',
+  },
+  userTitle: {
+    id: 'management.users.user_title',
+    defaultMessage: 'Username',
+  },
+  userSearch: {
+    id: 'management.users.search',
+    defaultMessage: 'Search users',
+  },
+  enterUsername: {
+    id: 'management.users.username_enter',
+    defaultMessage: 'Enter a username',
+  },
+  totalUsers: {
+    id: 'management.users.total_users',
+    defaultMessage: 'Total number of users: {total}',
+  },
   newOrganisation: {
     id: 'teamsAndOrgs.management.organisation.creation',
     defaultMessage: 'Create new organization',
