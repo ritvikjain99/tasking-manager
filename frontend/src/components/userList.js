@@ -8,6 +8,8 @@ import { styleClasses } from '../views/projectEdit';
 import { UserAvatar } from './user/avatar';
 import { fetchLocalJSONAPI } from '../network/genericJSONRequest';
 import { PaginatorLine } from './paginator';
+import { SettingsIcon, CheckIcon } from './svgIcons';
+import Popup from 'reactjs-popup';
 
 const UserFilter = ({ filters, setFilters, updateFilters, intl }) => {
   return (
@@ -181,10 +183,28 @@ export const UsersTable = ({ filters, setFilters }) => {
                     <FormattedMessage {...editMessages[`mapperLevel${user.mappingLevel}`]} />
                   </span>
                 </div>
-                <div className="w-30 fl">
+                <div className="w-20 fl">
                   <span className="ttu dib-ns dn">
                     <FormattedMessage {...editMessages[`userRole${user.role}`]} />
                   </span>
+                </div>
+                <div className="w-10 fl tr">
+                  <Popup
+                    trigger={
+                      <span>
+                        <SettingsIcon
+                          width="18px"
+                          height="18px"
+                          className="pointer hover-blue-grey"
+                        />
+                      </span>
+                    }
+                    position="right center"
+                    closeOnDocumentClick
+                    className="user-popup"
+                  >
+                    <UserEditMenu user={user} token={token} />
+                  </Popup>
                 </div>
               </li>
             );
@@ -200,6 +220,47 @@ export const UsersTable = ({ filters, setFilters }) => {
           lastPage={response.pagination.pages}
           className="pv3 tr"
         />
+      </div>
+    </div>
+  );
+};
+
+const UserEditMenu = ({ user, token }) => {
+  const roles = ['MAPPER', 'VALIDATOR', 'PROJECT_MANAGER', 'ADMIN'];
+  const mapperLevels = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
+  const iconClass = 'h1 w1';
+
+  const updateRole = (username, role) => {
+    fetchLocalJSONAPI(`users/${username}/actions/set-role/`);
+  };
+
+  return (
+    <div className="w-100 f6 tl ph1">
+      <div className="w-100 bb b--tan">
+        <p className="b mv3">Set Role</p>
+        {roles.map(r => {
+          return (
+            <div className="mv2 dim pointer w-100 flex items-center justify-between">
+              <p onClick={() => updateRole(user.username, r)} className="ma0 pa0">
+                <FormattedMessage {...editMessages[`userRole${r}`]} />
+              </p>
+              {r === user.role ? <CheckIcon className={iconClass} /> : null}
+            </div>
+          );
+        })}
+      </div>
+      <div className="w-100">
+        <p className="b mv3">Set mapper level</p>
+        {mapperLevels.map(m => {
+          return (
+            <div className="mv2 dim pointer w-100 flex items-center justify-between">
+              <p className="ma0 pa0">
+                <FormattedMessage {...editMessages[`mapperLevel${m}`]} />
+              </p>
+              {m === user.mappingLevel ? <CheckIcon className={iconClass} /> : null}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
